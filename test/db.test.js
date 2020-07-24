@@ -10,8 +10,7 @@ describe("db function",()=>{
      expect(data).toEqual({})
     })
     it ("works with existing file",()=>{
-        const loadedData= db.load(path.resolve(__dirname, '../lib/dbtest.json'))
-        console.log(loadedData)
+        const loadedData= db.load(path.resolve(__dirname, '../lib/dbtest2.json'))
         expect(loadedData.username).not.toBe(undefined)
     })
     it ("writes user on empty file",()=>{

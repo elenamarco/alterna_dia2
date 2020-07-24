@@ -1,10 +1,1 @@
-{
-    "username":{
-    "username": "username",
-    "name": "name",
-    "lastName" : "apellidos",
-    "email": "email",
-    "phone" : "phone",
-    "activitylist" : ""}
-   
-}
+{"\"username\"":{"username":"username","name":"name","lastName":"lastname","email":"email","phone":"phone"}}
