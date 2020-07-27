@@ -90,23 +90,32 @@ describe("Delete user function",()=>{
 
 })
 describe ("List of users function", ()=>{
-    const path1 = path.resolve(__dirname, '../lib/agenda.json')
-    const list = listUsers(path1)
-    expect(list[0].username).toEqual("ElenaMarco")
+    it("works for simpler case", ()=>{
+        const path1 = path.resolve(__dirname, '../lib/agenda.json')
+        const list = listUsers(path1)
+        expect(list[0].username).toEqual("ElenaMarco")
+    })
+    
 
 })
 describe ("Edit activity function", ()=>{
-    const path1 = path.resolve(__dirname, '../lib/agenda.json')
+    it("works for simpler case", ()=>{
+        const path1 = path.resolve(__dirname, '../lib/agenda.json')
     activityName = "work"
-    modifications = ["today", "2"]
+    modifications = ["today", "3"]
     modifiedActivity = editActivity("ElenaMarco", activityName, modifications, path1)
-    expect(modifiedActivity[1]).toEqual("today")
+    expect(modifiedActivity[2]).toEqual("3")
+    })
+    
 })
 describe ("Delete activity function", ()=>{
-    const path1 = path.resolve(__dirname, '../lib/agenda.json')
-    activityName = "home"
-    username = "ElenaMarco"
-    deleteActivity(username, activityName, path1)
-    loadedData=db.load(path1)
-    expect(loadedData[username].activityList[0]).not.toEqual("home")
+    it("works for simpler case", ()=>{
+        const path1 = path.resolve(__dirname, '../lib/agenda.json')
+        activityName = "work"
+        username = "ElenaMarco"
+        deleteActivity(username, activityName, path1)
+        loadedData=db.load(path1)
+        expect(loadedData[username].activityList).toEqual(["home","tuesday","18:00"])
+    })
 })
+    
