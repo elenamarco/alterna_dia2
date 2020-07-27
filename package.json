@@ -12,6 +12,7 @@
     "jest": "^26.1.0"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "stdio": "^2.1.1"
   }
 }
