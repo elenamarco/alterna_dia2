@@ -98,16 +98,16 @@ describe ("List of users function", ()=>{
     
 
 })
-describe ("Edit activity function", ()=>{
-    it("works for simpler case", ()=>{
-        const path1 = path.resolve(__dirname, '../lib/agenda.json')
-    activityName = "work"
-    modifications = ["today", "3"]
-    modifiedActivity = editActivity("ElenaMarco", activityName, modifications, path1)
-    expect(modifiedActivity[2]).toEqual("3")
-    })
+// describe ("Edit activity function", ()=>{
+//     it("works for simpler case", ()=>{
+//         const path1 = path.resolve(__dirname, '../lib/agenda.json')
+//     activityName = "work"
+//     modifications = ["today", "3"]
+//     modifiedActivity = editActivity("ElenaMarco", activityName, modifications, path1)
+//     expect(modifiedActivity[2]).toEqual("3")
+//     })
     
-})
+// })
 describe ("Delete activity function", ()=>{
     it("works for simpler case", ()=>{
         const path1 = path.resolve(__dirname, '../lib/agenda.json')
