@@ -2,9 +2,184 @@
     <div id = 'app'></div>
     <script>
         window.onload = function(){
+            mainPage()
+        }
             const app = document.querySelector('div#app')
+            function mainPage(){
+                app.innerHTML=''
+                getUsers('http://localhost:8003/users').then((res)=>{
+                const table = document.createElement('table')      
+                const head = document.createElement('h2')
+                head.textContent = 'List of users'
+                head.style.textAlign = 'center'
+                const rowh = document.createElement('tr')
+                rowh.append(head)
+                table.append(rowh)
+                table.append(tableTitle(["Username", "Name", "Last Name", "Email", "Phone"]))
+                for(let j=0; j<res.length; j++){
+                    let row = document.createElement('tr')
+                    for (let key in res[j]){
+                        if (key == "activityList"){
+                            break
+                        }
+                        let cell = document.createElement('td')
+                        cell.textContent = res[j][key]   
+                        cell.style.border = '1px solid black'
+                        cell.style.padding = '10px 60px 10px 30px'                     
+                        row.append(cell)
+                        row.onclick = onClickAct
+                        }
+                    table.append(row)  
+                }                
+                table.style.border = "solid "
+                table.style.borderCollapse = 'collapse'
+                table.style.marginLeft = 'auto'
+                table.style.marginRight = 'auto'
+                table.style.marginTop='2em'
+                app.append(table)
+                const newUserButton= document.createElement('button')
+                newUserButton.innerHTML = "Add user" 
+                newUserButton.onclick = newUserForm
+                newUserButton.style.marginRight = 'auto'
+                newUserButton.style.textAlign = 'center'
+                app.style.textAlign = 'center'
+                app.append(newUserButton)
+            })
 
+            }
+        function onClickAct(){
+            const user = this.getElementsByTagName('td')[0].textContent
+            app.innerHTML=''
+            const table = document.createElement('table')
+            const head2= document.createElement('h2')
+            head2.textContent = 'Activities of '+ user
+            head2.style.textAlign = 'center'
+            table.append(head2)
+            
+            table.append(tableTitle(["Activity", "Date", "Time"]))
+            const row3 = document.createElement('tr')
+            getUsers('http://localhost:8003/users').then((res)=>{
+                for (let i=0; i<res.length; i++){
+                    if (res[i].username === user){
+                        const userAct = res[i].activityList
+                        let j = 0
+                        while(j< userAct.length){
+                            let row3 = document.createElement('tr')
+                            for(let i=0; i<3; i++){
+                                let cell2 = document.createElement('td')
+                                cell2.textContent = userAct[i+j]
+                                cell2.style.border = '1px solid black'
+                                cell2.style.padding = '10px 60px 10px 30px' 
+                                row3.append(cell2)
+                            }
+                            table.append(row3)
+                            j+=3
+                        }    
+                    }
+                }                   
+            })
+            const backButton= document.createElement('button')
+            backButton.innerHTML = "Back" 
+            backButton.onclick = mainPage
+            table.style.border = "solid "
+            table.style.borderCollapse = 'collapse'
+            table.style.marginLeft = 'auto'
+            table.style.marginRight = 'auto'
+            table.style.marginTop='2em'
+            
+            app.append(table) 
+            app.append(backButton)
         }
 
+        function newUserForm() {
+            const br =document.createElement('br')
+            const form = document.createElement('form')
+            form.name = "new user form"           
+            var username = document.createElement('input')
+            username.type = 'text'
+            username.name = 'username'
+            username.placeholder = 'Username'           
+            form.append(username)
+            form.append(br.cloneNode())
+            var name = document.createElement('input')
+            name.type = 'text'
+            name.name = 'name'
+            name.placeholder = 'Name'
+            
+            form.append(name)
+            form.append(br.cloneNode())
+            var lastname = document.createElement('input')
+            lastname.type = 'text'
+            lastname.name = 'lastname'
+            lastname.placeholder = 'LastName'
+            
+            form.append(lastname)
+            form.append(br.cloneNode())
+            var email = document.createElement('input')
+            email.type = 'text'
+            email.name = 'email'
+            email.placeholder = 'Email'
+            
+            form.append(email)
+            form.append(br.cloneNode())
+            var phone = document.createElement('input')
+            phone.type = 'text'
+            phone.name = 'phone'
+            phone.placeholder = 'Phone'
+            
+            form.append(phone)
+            form.append(br.cloneNode())
+            const submitButton = document.createElement('input')
+            submitButton.type = 'button'
+            submitButton.value = "Submit"
+            form.append(submitButton)
+            submitButton.onclick = onClickSubmit
+            app.append(form)           
+        }
+        function onClickSubmit(){
+            addUser().then((res)=>{
+                if(res === 'Username taken'){
+                    alert('Username taken')
+                }
+                mainPage()
+            })
+        }
+        async function addUser(){
+            const userData = {}
+            const form = document.forms['new user form']
+            userData['username'] = form.querySelector('input[name="username"]').value
+            userData['name'] = form.querySelector('input[name="name"]').value
+            userData['lastname'] = form.querySelector('input[name="lastname"]').value
+            userData['phone'] = form.querySelector('input[name="phone"]').value
+            userData['email'] = form.querySelector('input[name="email"]').value
+
+            const newUser = await fetch('http://localhost:8003/user/add',{
+                method : 'POST',
+                headers : {'Content-Type': 'application/json'},
+                body : JSON.stringify(userData)
+            })
+            const body = await newUser.text()
+            return body
+        }
+
+        async function getUsers(url){
+            const users = await fetch(url)
+            const body = await users.json()
+            return body
+        }
+        function tableTitle(title){
+            const row = document.createElement('tr')
+            for (let i= 0; i<title.length; i++){
+                let cell = document.createElement('th')
+                cell.textContent = title[i]
+                cell.style.border = '1px solid black'
+                cell.style.padding = '10px 60px 10px 30px'
+                row.append(cell)
+            }
+        return row 
+        }
     </script>
 </body>
+
+
+
