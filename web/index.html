@@ -19,9 +19,9 @@
                 for(let j=0; j<res.length; j++){
                     let row = document.createElement('tr')
                     for (let key in res[j]){
-                        if (key == "activityList"){
-                            break
-                        }
+                        // if (key == "activityList"){
+                        //     break
+                        // }
                         let cell = document.createElement('td')
                         cell.textContent = res[j][key]   
                         cell.style.border = '1px solid black'
@@ -58,24 +58,19 @@
             
             table.append(tableTitle(["Activity", "Date", "Time"]))
             const row3 = document.createElement('tr')
-            getUsers('http://localhost:8003/users').then((res)=>{
+            getUsers(`http://localhost:8003/user/${user}/activities`).then((res)=>{
                 for (let i=0; i<res.length; i++){
-                    if (res[i].username === user){
-                        const userAct = res[i].activityList
-                        let j = 0
-                        while(j< userAct.length){
-                            let row3 = document.createElement('tr')
-                            for(let i=0; i<3; i++){
-                                let cell2 = document.createElement('td')
-                                cell2.textContent = userAct[i+j]
-                                cell2.style.border = '1px solid black'
-                                cell2.style.padding = '10px 60px 10px 30px' 
-                                row3.append(cell2)
-                            }
-                            table.append(row3)
-                            j+=3
-                        }    
+                    let row3 = document.createElement('tr')                   
+                    for (key in res[i]){ 
+                         if(key !== 'user' && key !== 'id'){
+                            let cell2 = document.createElement('td')
+                            cell2.textContent = res[i][key]
+                            cell2.style.border = '1px solid black'
+                            cell2.style.padding = '10px 60px 10px 30px' 
+                            row3.append(cell2)
+                        }                       
                     }
+                    table.append(row3)
                 }                   
             })
             const backButton= document.createElement('button')
